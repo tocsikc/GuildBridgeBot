@@ -6,6 +6,12 @@ from core.config import ServerConfig, SettingsConfig, AccountConfig
 
 mineflayer = require("mineflayer")
 
+def roundToHundreths(x):
+    return round((x + sys.float_info.epsilon) * 100) / 100
+
+def ensureValidDenominator(x):
+    return 1 if x == 0 else x
+
 def getInfo(call):
     r = requests.get(call)
     return r.json()
@@ -103,7 +109,7 @@ class MinecraftBotManager:
                 return
 
             if not message.startswith("Guild >") and not message.startswith("Officer >"):
-            return
+                return
             
             # Online Command
             if message.startswith("Guild Name: "):
@@ -147,12 +153,12 @@ class MinecraftBotManager:
             parsed_message = parsed_message.lower()
             
             if not parsed_message.startswith("!"):
-            self.send_to_discord(message)
-            return
+                self.send_to_discord(message)
+                return
             
             command_args = parsed_message.split(' ')
             
-            if command_args[0] == "!bedwars" or commands_args[0] == "!bw":
+            if command_args[0] == "!bedwars" or command_args[0] == "!bw":
                 if command_args[1] != "":
                     player_data = "https://api.hypixel.net/player?key=" + SettingsConfig.api_key + "&name=" + command_args[1]
                 else:
@@ -164,9 +170,12 @@ class MinecraftBotManager:
             final_kills_bedwars = data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
             final_deaths_bedwars = data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
             winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
-            player_stats = (player, "| WLR:", (wins_bedwars/losses_bedwars), "FKDR:",
-            (final_kills_bedwars/final_deaths_bedwars), "W:", wins_bedwars,"FK:", final_kills_bedwars,
-            "WS:", winstreak_bedwars)
+            
+            
+            player_stats = ((player if command_args[1] == "" else command_args[1]), "| WLR:",
+                            roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars)), "FKDR:",
+                            roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars)),
+                            "W:", wins_bedwars, "FK:", final_kills_bedwars, "WS:", winstreak_bedwars)
             self.send_minecraft_command(player_stats)
 
     def send_minecraft_message(self, discord, message, type):
