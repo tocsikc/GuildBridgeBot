@@ -102,7 +102,7 @@ class MinecraftBotManager:
                     ):
                 return
 
-            if !message.startswith("Guild >") and !message.startswith("Officer >"):
+            if message.startswith("Guild >") is False and message.startswith("Officer >") is False:
             return
             
             # Online Command
