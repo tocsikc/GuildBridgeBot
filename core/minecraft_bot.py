@@ -1,13 +1,14 @@
-import asyncio
-import sys
-import time
-import logging
+import asyncio, sys, time, logging, requests, json
 
 from javascript import require, On, config
 
 from core.config import ServerConfig, SettingsConfig, AccountConfig
 
 mineflayer = require("mineflayer")
+
+def getInfo(call):
+    r = requests.get(call)
+    return r.json()
 
 
 class MinecraftBotManager:
@@ -94,59 +95,90 @@ class MinecraftBotManager:
             print_message(message)
 
             if self.bot.username is None:
-                pass
+                return
+
+            if message.startswith("Guild > " + self.bot.username) or message.startswith(
+                    "Officer > " + self.bot.username
+                    ):
+                return
+
+            if !message.startswith("Guild >") and !message.startswith("Officer >"):
+            return
+            
+            # Online Command
+            if message.startswith("Guild Name: "):
+                message_buffer.clear()
+                self.wait_response = True
+            if message == "-----------------------------------------------------" and self.wait_response:
+                self.wait_response = False
+                self.send_to_discord("\n".join(message_buffer))
+                message_buffer.clear()
+            if self.wait_response is True:
+                message_buffer.append(message)
+
+            if "Unknown command" in message:
+                self.send_to_discord(message)
+            if "Click here to accept or type /guild accept " in message:
+                self.send_to_discord(message)
+                self.send_minecraft_message(None, message, "invite")
+            elif " is already in another guild!" in message or \
+                    ("You invited" in message and "to your guild. They have 5 minutes to accept." in message) or \
+                    " joined the guild!" in message or \
+                    " left the guild!" in message or \
+                    " was promoted from " in message or \
+                    " was demoted from " in message or \
+                    " was kicked from the guild!" in message or \
+                    " was kicked from the guild by " in message or \
+                    "You cannot invite this player to your guild!" in message or \
+                    "Disabled guild join/leave notifications!" in message or \
+                    "Enabled guild join/leave notifications!" in message or \
+                    "You cannot say the same message twice!" in message or \
+                    "You don't have access to the officer chat!" in message or \
+                    "Your guild is full!" in message or \
+                    "is already in your guild!" in message or \
+                    ("has muted" in message and "for" in message) or \
+                    "has unmuted" in message or \
+                    "You're currently guild muted" in message:
+                self.send_to_discord(message)
+            
+            message_start_index = message.find(':')
+            parsed_message = message[message_start_index:]
+            parsed_message = parsed_message.strip()
+            parsed_message = parsed_message.lower()
+            
+            if !parsed_message.startswith("!"):
+            self.send_to_discord(message)
+            return
+            
+            command_args = parsed_message.split(' ')
+            
+            if command_args[0] == "!bedwars" or commands_args[0] == "!bw":
+            if command_args[1] != "":
+                player_data = "https://api.hypixel.net/player?key=" + SettingsConfig.api_key + "&name=" + command_args[1]
+                
+                # do thing including a username as command_args[1]
+            # do thing here with no optional username
             else:
-                if message.startswith("Guild > " + self.bot.username) or message.startswith(
-                        "Officer > " + self.bot.username
-                        ):
-                    pass
-                else:
-                    if message.startswith("Guild >") or message.startswith("Officer >"):
-                        self.send_to_discord(message)
+                player_data = "https://api.hypixel.net/player?key=" + SettingsConfig.api_key + "&name=" + player
+            data = getInfo(player_data)
 
-                    # Online Command
-                    if message.startswith("Guild Name: "):
-                        message_buffer.clear()
-                        self.wait_response = True
-                    if message == "-----------------------------------------------------" and self.wait_response:
-                        self.wait_response = False
-                        self.send_to_discord("\n".join(message_buffer))
-                        message_buffer.clear()
-                    if self.wait_response is True:
-                        message_buffer.append(message)
-
-                    if "Unknown command" in message:
-                        self.send_to_discord(message)
-                    if "Click here to accept or type /guild accept " in message:
-                        self.send_to_discord(message)
-                        self.send_minecraft_message(None, message, "invite")
-                    elif " is already in another guild!" in message or \
-                            ("You invited" in message and "to your guild. They have 5 minutes to accept." in message) or \
-                            " joined the guild!" in message or \
-                            " left the guild!" in message or \
-                            " was promoted from " in message or \
-                            " was demoted from " in message or \
-                            " was kicked from the guild!" in message or \
-                            " was kicked from the guild by " in message or \
-                            "You cannot invite this player to your guild!" in message or \
-                            "Disabled guild join/leave notifications!" in message or \
-                            "Enabled guild join/leave notifications!" in message or \
-                            "You cannot say the same message twice!" in message or \
-                            "You don't have access to the officer chat!" in message or \
-                            "Your guild is full!" in message or \
-                            "is already in your guild!" in message or \
-                            ("has muted" in message and "for" in message) or \
-                            "has unmuted" in message or \
-                            "You're currently guild muted" in message:
-                        self.send_to_discord(message)
+            wins_bedwars = data["player"]["stats"]["Bedwars"]["wins_bedwars"]
+            losses_bedwars = data["player"]["stats"]["Bedwars"]["losses_bedwars"]
+            final_kills_bedwars = data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
+            final_deaths_bedwars = data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
+            winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
+            player_stats = (player, "| WLR:", (wins_bedwars/losses_bedwars), "FKDR:",
+            (final_kills_bedwars/final_deaths_bedwars), "W:", wins_bedwars,"FK:", final_kills_bedwars,
+            "WS:", winstreak_bedwars)
+            self.send_minecraft_command(player_stats)
 
     def send_minecraft_message(self, discord, message, type):
         if type == "General":
-            message_text = f"/gchat {discord}: {message}"
+            message_text = f"/gc {discord}: {message}"
             message_text = message_text[:256]
             self.bot.chat(message_text)
         if type == "Officer":
-            message_text = f"/ochat {discord}: {message}"
+            message_text = f"/oc {discord}: {message}"
             message_text = message_text[:256]
             self.bot.chat(message_text)
 
@@ -158,7 +190,7 @@ class MinecraftBotManager:
                     username = message.split()[2]
                 else:
                     username = message.split()[1]
-                self.bot.chat(f"/guild accept {username}")
+                self.bot.chat(f"/g accept {username}")
 
     def send_minecraft_command(self, message):
         message = message.replace("!o ", "/")

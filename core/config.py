@@ -193,6 +193,7 @@ class RedisConfig(ConfigObject, base_key="redis"):
 
 
 class SettingsConfig(ConfigObject, base_key="settings"):
+    api_key: Union[str, None] = ConfigKey(str, None)
     autoaccept: bool = ConfigKey(bool, False)
     extensions: List[str] = ConfigKey(list, [])
 
