@@ -27,6 +27,7 @@
         "sendChannel": ""
     },
     "settings": {
+        "api_key": "",
         "autoaccept": false,
         "extensions": []
     }
