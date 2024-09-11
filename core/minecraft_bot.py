@@ -163,20 +163,31 @@ class MinecraftBotManager:
                     player_data = "https://api.hypixel.net/player?key=" + SettingsConfig.api_key + "&name=" + command_args[1]
                 else:
                     player_data = "https://api.hypixel.net/player?key=" + SettingsConfig.api_key + "&name=" + player
-            data = getInfo(player_data)
+                data = getInfo(player_data)
 
-            wins_bedwars = data["player"]["stats"]["Bedwars"]["wins_bedwars"]
-            losses_bedwars = data["player"]["stats"]["Bedwars"]["losses_bedwars"]
-            final_kills_bedwars = data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
-            final_deaths_bedwars = data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
-            winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
-            
-            
-            player_stats = ((player if command_args[1] == "" else command_args[1]), "| WLR:",
-                            roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars)), "FKDR:",
-                            roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars)),
-                            "W:", wins_bedwars, "FK:", final_kills_bedwars, "WS:", winstreak_bedwars)
-            self.send_minecraft_command(player_stats)
+                if data["success"] == False:
+                    if data["cause"] == "Invalid API key":
+                        player_stats = "[ERROR] Invalid API key"
+                    elif data["cause"] == "You have already looked up this name recently":
+                        player_stats = "[ERROR] Please wait before searching for the same user"
+                    else:
+                        player_stats = "[ERROR] Unknown"
+
+                elif data["player"] == "null":
+                    player_stats = "[ERROR] Invalid Player"
+                else:
+                    wins_bedwars = data["player"]["stats"]["Bedwars"]["wins_bedwars"]
+                    losses_bedwars = data["player"]["stats"]["Bedwars"]["losses_bedwars"]
+                    final_kills_bedwars = data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
+                    final_deaths_bedwars = data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
+                    winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
+                
+                
+                    player_stats = ((player if command_args[1] == "" else command_args[1]), "| WLR:",
+                                    roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars)), "FKDR:",
+                                    roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars)),
+                                    "W:", wins_bedwars, "FK:", final_kills_bedwars, "WS:", winstreak_bedwars)
+                self.send_minecraft_command(None, player_stats, "General")
 
     def send_minecraft_message(self, discord, message, type):
         if type == "General":
