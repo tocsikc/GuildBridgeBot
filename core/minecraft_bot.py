@@ -200,16 +200,17 @@ class MinecraftBotManager:
     def send_minecraft_message(self, discord, message, type):
         if type == "General":
             message_text = f"/gc {discord}: {message}"
+            if discord is None:
+                message_text = f"/gc {message}"
             message_text = message_text[:256]
             self.bot.chat(message_text)
-            if discord is None:
-                f"/gc {message}"
+            
         if type == "Officer":
             message_text = f"/oc {discord}: {message}"
+            if discord is None:
+                message_text = f"/oc {message}"
             message_text = message_text[:256]
             self.bot.chat(message_text)
-            if discord is None:
-                f"/oc {message}"
         if type == "invite":
             if SettingsConfig.autoaccept:
                 message = message.split()
