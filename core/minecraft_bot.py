@@ -198,7 +198,7 @@ class MinecraftBotManager:
 
     def send_minecraft_message(self, discord, message, type):
         if type == "General":
-            message_text = f"/gc {discord.replace("|","")}: {message}"
+            message_text = f"/gc {discord}: {message}"
             message_text = message_text[:256]
             self.bot.chat(message_text)
         if type == "Officer":
