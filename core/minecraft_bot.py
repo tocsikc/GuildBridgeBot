@@ -190,10 +190,13 @@ class MinecraftBotManager:
                     winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
                     print("Wins:", wins_bedwars)
 
-                    player_stats = ((username if len(command_args) == 1 else command_args[1]), "| WLR:",
-                                    roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars)), "FKDR:",
-                                    roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars)),
-                                    "W:", wins_bedwars, "FK:", final_kills_bedwars, "WS:", winstreak_bedwars)
+                    player_stats = ((username if len(command_args) == 1 else command_args[1])+
+                                    " | WLR: " + roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars)) + 
+                                    " | FKDR: " + roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars))+ 
+                                    " | W: " +  wins_bedwars +
+                                    " | FK: " + final_kills_bedwars + 
+                                    " | WS: " + winstreak_bedwars)
+                    
                 self.send_minecraft_message(None, player_stats, "General")
                 return
 

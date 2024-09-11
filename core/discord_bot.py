@@ -308,7 +308,7 @@ class DiscordBridgeBot(commands.Bot):
                 self.dispatch("minecraft_pong")
             if message.startswith("Guild >"):
                 if ":" not in message:
-                    parsed_message = message.replace("Guild >")
+                    parsed_message = message.replace("Guild >", "")
                     parsed_message = parsed_message.strip()
 
                     memberusername = parsed_message.split()[0]
