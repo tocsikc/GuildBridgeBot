@@ -150,32 +150,21 @@ class MinecraftBotManager:
                     "You're currently guild muted" in message:
                 self.send_to_discord(message)
 
-            message_start_index = message.find(':')
-            parsed_message = message[message_start_index+1:]
+            username, parsed_message = regex_username.match(message).groups()
+            username.strip()
             parsed_message = parsed_message.strip()
             parsed_message = parsed_message.lower()
-
-            print(parsed_message)
-
-            
 
             if not parsed_message.startswith("!"):
                 self.send_to_discord(message)
                 return
-            print("test")
+            
             command_args = parsed_message.split(' ')
-            print(command_args)
             if command_args[0] == "!bedwars" or command_args[0] == "!bw":
                 if len(command_args) >= 2:
                     player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name=" + command_args[1]
                     # do thing including a username as command_args[1]
                 else:
-                    username, message = regex_username.match(message).groups()
-                    if username.startswith("["):
-                        username = username.split(" ")[1]
-                    else:
-                        username = username.split(" ")[0]
-                    username = username.strip()
                     player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name=" + username
                     # do thing here with no optional username
                 data = getInfo(player_data)
