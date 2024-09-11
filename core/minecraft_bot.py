@@ -160,14 +160,13 @@ class MinecraftBotManager:
             
 
             if not parsed_message.startswith("!"):
-                print("Test:", parsed_message, "v2")
                 self.send_to_discord(message)
                 return
             print("test")
             command_args = parsed_message.split(' ')
             print(command_args)
             if command_args[0] == "!bedwars" or command_args[0] == "!bw":
-                if command_args[1]:
+                if len(command_args) >= 2:
                     player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name=" + command_args[1]
                     # do thing including a username as command_args[1]
                 else:
