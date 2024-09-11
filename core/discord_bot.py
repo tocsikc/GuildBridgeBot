@@ -353,6 +353,7 @@ class DiscordBridgeBot(commands.Bot):
                 else:
                     username = username.split(" ")[0]
                 username = username.strip()
+                print(username)
                 self.dispatch("hypixel_guild_officer_message", username, message)
                 await self.send_user_message(username, message, officer=True)
     
