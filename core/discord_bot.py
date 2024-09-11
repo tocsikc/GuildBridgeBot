@@ -40,7 +40,7 @@ class DiscordBridgeBot(commands.Bot):
                 guild_messages=True, message_content=True, guilds=True,
             ),
             help_command=None,
-            activity=discord.Game(name="Guild Bridge Bot")
+            activity=discord.Game(name="Interacting")
         )
         self.mineflayer_bot = None
         self.redis_manager = None
