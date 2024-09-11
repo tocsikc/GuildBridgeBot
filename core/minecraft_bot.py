@@ -105,7 +105,7 @@ class MinecraftBotManager:
             parsed_message = parsed_message.strip()
             parsed_message = parsed_message.lower()
 
-            print("Test:", parsed_message)
+            print(parsed_message)
 
             if self.bot.username is None:
                 return
