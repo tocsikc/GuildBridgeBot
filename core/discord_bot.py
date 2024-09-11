@@ -40,7 +40,7 @@ class DiscordBridgeBot(commands.Bot):
                 guild_messages=True, message_content=True, guilds=True,
             ),
             help_command=None,
-            activity=discord.Game(name="Interacting")
+            activity=discord.Game(name="Guild Bridge Bot")
         )
         self.mineflayer_bot = None
         self.redis_manager = None
@@ -348,9 +348,10 @@ class DiscordBridgeBot(commands.Bot):
                 username, message = regex_officer.match(message).groups()
                 if self.mineflayer_bot.bot.username in username:
                     return
-                message = message.replace("Guild >", "")
-                if "[" in username:
-                    username = username.split("]")[1]
+                if username.startswith("["):
+                    username = username.split(" ")[1]
+                else:
+                    username = username.split(" ")[0]
                 username = username.strip()
                 self.dispatch("hypixel_guild_officer_message", username, message)
                 await self.send_user_message(username, message, officer=True)
