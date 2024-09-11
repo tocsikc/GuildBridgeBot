@@ -154,7 +154,7 @@ class MinecraftBotManager:
 
             print("Test:", parsed_message)
             if not parsed_message.startswith("!"):
-                print("Test:", parsed_message "v2")
+                print("Test:", parsed_message, "v2")
                 self.send_to_discord(message)
                 return
             print("test")
