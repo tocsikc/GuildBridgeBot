@@ -193,7 +193,7 @@ class MinecraftBotManager:
                                     roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars)), "FKDR:",
                                     roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars)),
                                     "W:", wins_bedwars, "FK:", final_kills_bedwars, "WS:", winstreak_bedwars)
-                self.send_minecraft_command(None, player_stats, "General")
+                self.send_minecraft_message(None, player_stats, "General")
                 return
 
     def send_minecraft_message(self, discord, message, type):
