@@ -168,17 +168,14 @@ class MinecraftBotManager:
                 print("Got data")
 
                 if data["success"] == False:
+                    print("success: False")
                     if data["cause"] == "Invalid API key":
-                        print("Invalid API key")
                         player_stats = "[ERROR] Invalid API key"
                     elif data["cause"] == "You have already looked up this name recently":
-                        print("Wait before searching")
                         player_stats = "[ERROR] Please wait before searching for the same user"
                     else:
-                        print("Unknown error")
                         player_stats = "[ERROR] Unknown"
-            else:
-                print("Does Not contain")
+        
 
                 elif data["player"] == "null":
                     print("[ERROR] Invalid Player")
