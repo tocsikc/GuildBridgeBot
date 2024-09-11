@@ -188,11 +188,10 @@ class MinecraftBotManager:
                     final_kills_bedwars = data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
                     final_deaths_bedwars = data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
                     winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
-                    print("Wins:", wins_bedwars)
 
                     player_stats = ((username if len(command_args) == 1 else command_args[1])+
-                                    " | WLR: " + roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars)) + 
-                                    " | FKDR: " + roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars))+ 
+                                    " | WLR: " + str(roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars))) + 
+                                    " | FKDR: " + str(roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars)))+ 
                                     " | W: " +  wins_bedwars +
                                     " | FK: " + final_kills_bedwars + 
                                     " | WS: " + winstreak_bedwars)
