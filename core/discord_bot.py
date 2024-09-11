@@ -308,16 +308,10 @@ class DiscordBridgeBot(commands.Bot):
                 self.dispatch("minecraft_pong")
             if message.startswith("Guild >"):
                 if ":" not in message:
-                    if "[VIP]" in message or "[VIP+]" in message or "[MVP]" in message or "[MVP+]" in message or "[MVP++]" in message:
-                        if "]:" in message:
-                            memberusername = message.split()[1]
-                        else:
-                            memberusername = message.split()[1][:-1]
-                    else:
-                        if "]:" in message:
-                            memberusername = message.split()[0]
-                        else:
-                            memberusername = message.split()[0][:-1]
+                    parsed_message = message.replace("Guild >")
+                    parsed_message = parsed_message.strip()
+
+                    memberusername = parsed_message.split()[0]
                     if self.mineflayer_bot.bot.username in memberusername:
                         return
                     if " joined." in message:

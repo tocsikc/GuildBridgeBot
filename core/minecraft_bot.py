@@ -154,6 +154,7 @@ class MinecraftBotManager:
             
             if not parsed_message.startswith("!"):
                 self.send_to_discord(message)
+                print("Test:", parsed_message)
                 return
             
             command_args = parsed_message.split(' ')
@@ -164,16 +165,23 @@ class MinecraftBotManager:
                 else:
                     player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name=" + player
                 data = getInfo(player_data)
+                print("Got data")
 
                 if data["success"] == False:
                     if data["cause"] == "Invalid API key":
+                        print("Invalid API key")
                         player_stats = "[ERROR] Invalid API key"
                     elif data["cause"] == "You have already looked up this name recently":
+                        print("Wait before searching")
                         player_stats = "[ERROR] Please wait before searching for the same user"
                     else:
+                        print("Unknown error")
                         player_stats = "[ERROR] Unknown"
+            else:
+                print("Does Not contain")
 
                 elif data["player"] == "null":
+                    print("[ERROR] Invalid Player")
                     player_stats = "[ERROR] Invalid Player"
                 else:
                     wins_bedwars = data["player"]["stats"]["Bedwars"]["wins_bedwars"]
@@ -181,6 +189,7 @@ class MinecraftBotManager:
                     final_kills_bedwars = data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
                     final_deaths_bedwars = data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
                     winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
+                    print("Wins:", wins_bedwars)
 
                     player_stats = ((player if command_args[1] == "" else command_args[1]), "| WLR:",
                                     roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars)), "FKDR:",
