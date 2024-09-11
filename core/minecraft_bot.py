@@ -154,13 +154,13 @@ class MinecraftBotManager:
             username, parsed_message = regex_username.match(message).groups()
             username.strip()
             parsed_message = parsed_message.strip()
-            parsed_message = parsed_message.lower()
 
             if not parsed_message.startswith("!"):
                 self.send_to_discord(message)
                 return
             
             command_args = parsed_message.split(' ')
+            command_args[0] = command_args[0].lower()
             if command_args[0] == "!bedwars" or command_args[0] == "!bw":
                 if len(command_args) >= 2:
                     player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name={command_args[1]}"
@@ -200,14 +200,14 @@ class MinecraftBotManager:
     def send_minecraft_message(self, discord, message, type):
         if type == "General":
             message_text = f"/gc {discord}: {message}"
-            if discord is None:
+            if discord == None:
                 message_text = f"/gc {message}"
             message_text = message_text[:256]
             self.bot.chat(message_text)
             
         if type == "Officer":
             message_text = f"/oc {discord}: {message}"
-            if discord is None:
+            if discord == None:
                 message_text = f"/oc {message}"
             message_text = message_text[:256]
             self.bot.chat(message_text)
