@@ -31,7 +31,7 @@ sudo apt install python3-pip
 apt install python3.12-venv
 
 # Clone the project
-git clone https://github.com/Jacktheguys/GuildBridgeBot
+git clone https://github.com/tocsikc/GuildBridgeBot
 
 # Create directories for bridge bots
 mkdir bridges
