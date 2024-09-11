@@ -166,7 +166,7 @@ class MinecraftBotManager:
                     player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name={command_args[1]}"
                 else:
                     player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name={username}"
-                data = getInfo(player_data)
+                data = getInfo(player_data) 
                 print("Got data")
 
                 if data["success"] == False:
@@ -187,11 +187,11 @@ class MinecraftBotManager:
                     losses_bedwars = data["player"]["stats"]["Bedwars"]["losses_bedwars"]
                     final_kills_bedwars = data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
                     final_deaths_bedwars = data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
+                    target_user = data["player"]["playername"]
                     # winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
 
                     win_loss_ratio = roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars))
                     final_kill_death_ratio = roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars))
-                    target_user = username if len(command_args) == 1 else command_args[1]
 
                     player_stats = f"{target_user} | WLR: {win_loss_ratio} | FKDR: {final_kill_death_ratio} | W: {wins_bedwars} | FK: {final_kills_bedwars}"# | WS: {winstreak_bedwars}"
                     self.send_minecraft_message(None, player_stats, "General")
@@ -202,6 +202,7 @@ class MinecraftBotManager:
             message_text = f"/gc {discord}: {message}"
             if discord == None:
                 message_text = f"/gc {message}"
+                print("Discord is none")
             message_text = message_text[:256]
             self.bot.chat(message_text)
             
