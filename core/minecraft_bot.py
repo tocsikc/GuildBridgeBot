@@ -148,7 +148,7 @@ class MinecraftBotManager:
                 self.send_to_discord(message)
             
             message_start_index = message.find(':')
-            parsed_message = message[message_start_index+1:]
+            parsed_message = message[message_start_index:]
             parsed_message = parsed_message.strip()
             parsed_message = parsed_message.lower()
             
@@ -160,9 +160,9 @@ class MinecraftBotManager:
             
             if command_args[0] == "!bedwars" or command_args[0] == "!bw":
                 if command_args[1] != "":
-                    player_data = "https://api.hypixel.net/player?key=" + SettingsConfig.api_key + "&name=" + command_args[1]
+                    player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name=" + command_args[1]
                 else:
-                    player_data = "https://api.hypixel.net/player?key=" + SettingsConfig.api_key + "&name=" + player
+                    player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name=" + player
                 data = getInfo(player_data)
 
                 if data["success"] == False:
@@ -181,17 +181,17 @@ class MinecraftBotManager:
                     final_kills_bedwars = data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
                     final_deaths_bedwars = data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
                     winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
-                
-                
+
                     player_stats = ((player if command_args[1] == "" else command_args[1]), "| WLR:",
                                     roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars)), "FKDR:",
                                     roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars)),
                                     "W:", wins_bedwars, "FK:", final_kills_bedwars, "WS:", winstreak_bedwars)
                 self.send_minecraft_command(None, player_stats, "General")
+                return
 
     def send_minecraft_message(self, discord, message, type):
         if type == "General":
-            message_text = f"/gc {discord}: {message}"
+            message_text = f"/gc {discord.replace("|","")}: {message}"
             message_text = message_text[:256]
             self.bot.chat(message_text)
         if type == "Officer":
