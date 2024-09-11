@@ -193,9 +193,7 @@ class MinecraftBotManager:
                     final_kill_death_ratio = roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars))
                     target_user = username if len(command_args) == 1 else command_args[1]
 
-                    player_stats = f"{target_user} | WLR: {win_loss_ratio} 
-                    | FKDR: {final_kill_death_ratio} | W: {wins_bedwars} 
-                    | FK: {final_kills_bedwars} | WS: {winstreak_bedwars}"
+                    player_stats = f"{target_user} | WLR: {win_loss_ratio} | FKDR: {final_kill_death_ratio} | W: {wins_bedwars} | FK: {final_kills_bedwars} | WS: {winstreak_bedwars}"
                     self.send_minecraft_message(None, player_stats, "General")
                 return
 
