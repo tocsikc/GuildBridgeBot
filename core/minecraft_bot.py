@@ -148,7 +148,7 @@ class MinecraftBotManager:
                 self.send_to_discord(message)
             
             message_start_index = message.find(':')
-            parsed_message = message[message_start_index:]
+            parsed_message = message[message_start_index+1:]
             parsed_message = parsed_message.strip()
             parsed_message = parsed_message.lower()
             
