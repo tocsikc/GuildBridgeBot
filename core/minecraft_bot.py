@@ -1,8 +1,10 @@
-import asyncio, sys, time, logging, requests, json
+import asyncio, sys, time, logging, requests, json, re
 
 from javascript import require, On, config
 
 from core.config import ServerConfig, SettingsConfig, AccountConfig
+
+regex_username = re.compile(r"^(?:Guild|Officer) > (?:\[[+A-Z]*\] )*([a-zA-Z0-9_]+) (?:\[[A-Z]*\]): (.+)")
 
 mineflayer = require("mineflayer")
 
@@ -100,15 +102,6 @@ class MinecraftBotManager:
 
             print_message(message)
 
-            message_start_index = message.find(':')
-            parsed_message = message[message_start_index+1:]
-            parsed_message = parsed_message.strip()
-            parsed_message = parsed_message.lower()
-
-            print(parsed_message)
-
-            player = message[:message_start_index]
-            player = player.split()[3].lower()
 
             if self.bot.username is None:
                 return
@@ -157,19 +150,34 @@ class MinecraftBotManager:
                     "You're currently guild muted" in message:
                 self.send_to_discord(message)
 
+            message_start_index = message.find(':')
+            parsed_message = message[message_start_index+1:]
+            parsed_message = parsed_message.strip()
+            parsed_message = parsed_message.lower()
+
+            print(parsed_message)
+
+            
+
             if not parsed_message.startswith("!"):
                 print("Test:", parsed_message, "v2")
                 self.send_to_discord(message)
                 return
             print("test")
             command_args = parsed_message.split(' ')
-            
+            print(command_args)
             if command_args[0] == "!bedwars" or command_args[0] == "!bw":
                 if command_args[1]:
                     player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name=" + command_args[1]
                     # do thing including a username as command_args[1]
                 else:
-                    player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name=" + player
+                    username, message = regex_username.match(message).groups()
+                    if username.startswith("["):
+                        username = username.split(" ")[1]
+                    else:
+                        username = username.split(" ")[0]
+                    username = username.strip()
+                    player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name=" + username
                     # do thing here with no optional username
                 data = getInfo(player_data)
                 print("Got data")
@@ -195,7 +203,7 @@ class MinecraftBotManager:
                     winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
                     print("Wins:", wins_bedwars)
 
-                    player_stats = ((player if command_args[1] == "" else command_args[1]), "| WLR:",
+                    player_stats = ((username if len(command_args) == 1 else command_args[1]), "| WLR:",
                                     roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars)), "FKDR:",
                                     roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars)),
                                     "W:", wins_bedwars, "FK:", final_kills_bedwars, "WS:", winstreak_bedwars)
