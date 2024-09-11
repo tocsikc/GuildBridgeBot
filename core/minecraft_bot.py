@@ -100,6 +100,13 @@ class MinecraftBotManager:
 
             print_message(message)
 
+            message_start_index = message.find(':')
+            parsed_message = message[message_start_index+1:]
+            parsed_message = parsed_message.strip()
+            parsed_message = parsed_message.lower()
+
+            print("Test:", parsed_message)
+
             if self.bot.username is None:
                 return
 
@@ -146,13 +153,7 @@ class MinecraftBotManager:
                     "has unmuted" in message or \
                     "You're currently guild muted" in message:
                 self.send_to_discord(message)
-            
-            message_start_index = message.find(':')
-            parsed_message = message[message_start_index+1:]
-            parsed_message = parsed_message.strip()
-            parsed_message = parsed_message.lower()
 
-            print("Test:", parsed_message)
             if not parsed_message.startswith("!"):
                 print("Test:", parsed_message, "v2")
                 self.send_to_discord(message)
