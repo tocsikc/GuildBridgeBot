@@ -120,6 +120,9 @@ class MinecraftBotManager:
             if not message.startswith("Guild >") and not message.startswith("Officer >"):
                 return
             
+            if message == "You cannot say the same message twice!":
+                self.send_minecraft_message("None", message, "General")
+            
             # Online Command
             if message.startswith("Guild Name: "):
                 message_buffer.clear()
@@ -195,7 +198,7 @@ class MinecraftBotManager:
                     bedwars_stats = [wins_bedwars, losses_bedwars, final_kills_bedwars, final_deaths_bedwars, winstreak_bedwars]
                     for stat in bedwars_stats:
                         try:
-                            stat = data["player"]["stats"]["Bedwars"][str(stat)]
+                            stat = data["player"]["stats"]["Bedwars"][f"{stat}"]
                         except:
                             stat = 0
                         print(stat)
