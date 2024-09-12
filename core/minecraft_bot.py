@@ -6,11 +6,12 @@ from core.config import ServerConfig, SettingsConfig, AccountConfig
 
 regex_username = re.compile(r"^(?:Guild|Officer) > (?:\[[+A-Z]*\] )*([a-zA-Z0-9_]+) (?:\[[A-Z]*\]: )?(.+)")
 
-wins_bedwars = 0
-losses_bedwars = 0
-final_kills_bedwars = 0
-final_deaths_bedwars = 0
-winstreak_bedwars = 0
+data = None
+wins_bedwars = "wins_bedwars"
+losses_bedwars = "losses_bedwars"
+final_kills_bedwars = "final_kills_bedwars"
+final_deaths_bedwars = "final_deaths_bedwars"
+winstreak_bedwars = "winstreak"
 
 mineflayer = require("mineflayer")
 
@@ -19,6 +20,13 @@ def roundToHundreths(x):
 
 def ensureValidDenominator(x):
     return 1 if x == 0 else x
+
+def getPlayerStat(mode, x):
+    if mode == "Bedwars":
+        try:
+            return data["player"]["stats"][mode][x]
+        except:
+            return 0
 
 def getInfo(call):
     r = requests.get(call)
@@ -194,15 +202,11 @@ class MinecraftBotManager:
                     player_stats = "[ERROR] Invalid Player"
                     self.send_minecraft_message("None", player_stats, "General")
                 else:
-                    # winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
-                    bedwars_stats = [wins_bedwars, losses_bedwars, final_kills_bedwars, final_deaths_bedwars, winstreak_bedwars]
-                    for stat in bedwars_stats:
-                        try:
-                            stat = data["player"]["stats"]["Bedwars"][f"{stat}"]
-                        except:
-                            stat = 0
-                        print(stat)
-
+                    wins_bedwars = getPlayerStat("Bedwars", "wins_bedwars")
+                    losses_bedwars = getPlayerStat("Bedwars", "losses_bedwars")
+                    final_kills_bedwars = getPlayerStat("Bedwars", "final_kills_bedwars")
+                    final_deaths_bedwars = getPlayerStat("Bedwars", "final_deaths_bedwars")
+                    winstreak_bedwars = getPlayerStat("Bedwars", "winstreak")
                     target_user = data["player"]["displayname"]
 
                     win_loss_ratio = roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars))
