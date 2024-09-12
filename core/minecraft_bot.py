@@ -179,15 +179,17 @@ class MinecraftBotManager:
                     print("success: False")
                     if data["cause"] == "Invalid API key":
                         player_stats = "[ERROR] Invalid API key"
+                        self.send_minecraft_message("None", player_stats, "General")
                     elif data["cause"] == "You have already looked up this name recently":
                         player_stats = "[ERROR] Please wait before searching for the same user"
+                        self.send_minecraft_message("None", player_stats, "General")
                     else:
                         player_stats = "[ERROR] Unknown"
-        
-
+                        self.send_minecraft_message("None", player_stats, "General")
                 elif data["player"] == "null":
                     print("[ERROR] Invalid Player")
                     player_stats = "[ERROR] Invalid Player"
+                    self.send_minecraft_message("None", player_stats, "General")
                 else:
                     # winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
                     bedwars_stats = [wins_bedwars, losses_bedwars, final_kills_bedwars, final_deaths_bedwars, winstreak_bedwars]
