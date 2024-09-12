@@ -6,13 +6,6 @@ from core.config import ServerConfig, SettingsConfig, AccountConfig
 
 regex_username = re.compile(r"^(?:Guild|Officer) > (?:\[[+A-Z]*\] )*([a-zA-Z0-9_]+) (?:\[[A-Z]*\]: )?(.+)")
 
-data = None
-wins_bedwars = "wins_bedwars"
-losses_bedwars = "losses_bedwars"
-final_kills_bedwars = "final_kills_bedwars"
-final_deaths_bedwars = "final_deaths_bedwars"
-winstreak_bedwars = "winstreak"
-
 mineflayer = require("mineflayer")
 
 def roundToHundreths(x):
@@ -21,7 +14,7 @@ def roundToHundreths(x):
 def ensureValidDenominator(x):
     return 1 if x == 0 else x
 
-def getPlayerStat(mode, x):
+def getPlayerStat(mode, x, data):
     if mode == "Bedwars":
         try:
             return data["player"]["stats"][mode][x]
@@ -202,11 +195,11 @@ class MinecraftBotManager:
                     player_stats = "[ERROR] Invalid Player"
                     self.send_minecraft_message("None", player_stats, "General")
                 else:
-                    wins_bedwars = getPlayerStat("Bedwars", "wins_bedwars")
-                    losses_bedwars = getPlayerStat("Bedwars", "losses_bedwars")
-                    final_kills_bedwars = getPlayerStat("Bedwars", "final_kills_bedwars")
-                    final_deaths_bedwars = getPlayerStat("Bedwars", "final_deaths_bedwars")
-                    winstreak_bedwars = getPlayerStat("Bedwars", "winstreak")
+                    wins_bedwars = getPlayerStat("Bedwars", "wins_bedwars", data)
+                    losses_bedwars = getPlayerStat("Bedwars", "losses_bedwars", data)
+                    final_kills_bedwars = getPlayerStat("Bedwars", "final_kills_bedwars", data)
+                    final_deaths_bedwars = getPlayerStat("Bedwars", "final_deaths_bedwars", data)
+                    winstreak_bedwars = getPlayerStat("Bedwars", "winstreak", data)
                     target_user = data["player"]["displayname"]
 
                     win_loss_ratio = roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars))
