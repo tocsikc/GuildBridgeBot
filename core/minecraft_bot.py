@@ -6,6 +6,8 @@ from core.config import ServerConfig, SettingsConfig, AccountConfig
 
 regex_username = re.compile(r"^(?:Guild|Officer) > (?:\[[+A-Z]*\] )*([a-zA-Z0-9_]+) (?:\[[A-Z]*\]: )?(.+)")
 
+wins_bedwars = 0, losses_bedwars = 0, final_kills_bedwars = 0, final_deaths_bedwars = 0, winstreak_bedwars = 0
+
 mineflayer = require("mineflayer")
 
 def roundToHundreths(x):
@@ -184,17 +186,19 @@ class MinecraftBotManager:
                     player_stats = "[ERROR] Invalid Player"
                 else:
                     # winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
-                    
-                    wins_bedwars = data["player"]["stats"]["Bedwars"]["wins_bedwars"]
-                    losses_bedwars = data["player"]["stats"]["Bedwars"]["losses_bedwars"]
-                    final_kills_bedwars = data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
-                    final_deaths_bedwars = data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
+                    bedwars_stats = [wins_bedwars, losses_bedwars, final_kills_bedwars, final_deaths_bedwars, winstreak_bedwars]
+                    for stat in bedwars_stats:
+                        try:
+                            stat = data["player"]["stats"]["Bedwars"][str(stat)]
+                        except:
+                            stat = 0
+
                     target_user = data["player"]["displayname"]
 
                     win_loss_ratio = roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars))
                     final_kill_death_ratio = roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars))
 
-                    player_stats = f"{target_user} | WLR: {win_loss_ratio} | FKDR: {final_kill_death_ratio} | W: {wins_bedwars} | FK: {final_kills_bedwars}"# | WS: {winstreak_bedwars}"
+                    player_stats = f"{target_user} | WLR: {win_loss_ratio} | FKDR: {final_kill_death_ratio} | W: {wins_bedwars} | FK: {final_kills_bedwars} | WS: {winstreak_bedwars}"
                     self.send_minecraft_message("None", player_stats, "General")
                 return
 
