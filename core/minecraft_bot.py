@@ -129,7 +129,7 @@ class MinecraftBotManager:
                 self.send_to_discord(message)
             if "Click here to accept or type /guild accept " in message:
                 self.send_to_discord(message)
-                self.send_minecraft_message(None, message, "invite")
+                self.send_minecraft_message("None", message, "invite")
             elif " is already in another guild!" in message or \
                     ("You invited" in message and "to your guild. They have 5 minutes to accept." in message) or \
                     " joined the guild!" in message or \
@@ -183,32 +183,32 @@ class MinecraftBotManager:
                     print("[ERROR] Invalid Player")
                     player_stats = "[ERROR] Invalid Player"
                 else:
-                    wins_bedwars = data["player"]["stats"]["Bedwars"]["wins_bedwars"]
-                    losses_bedwars = data["player"]["stats"]["Bedwars"]["losses_bedwars"]
-                    final_kills_bedwars = data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
-                    final_deaths_bedwars = data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
-                    target_user = data["player"]["displayname"]
                     # winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
+                    
+                    wins_bedwars = 0 if data["player"]["stats"]["Bedwars"]["wins_bedwars"] == 0 else data["player"]["stats"]["Bedwars"]["wins_bedwars"]
+                    losses_bedwars = 0 if data["player"]["stats"]["Bedwars"]["losses_bedwars"] == 0 else data["player"]["stats"]["Bedwars"]["losses_bedwars"]
+                    final_kills_bedwars = 0 if data["player"]["stats"]["Bedwars"]["final_kills_bedwars"] == 0 else data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
+                    final_deaths_bedwars = 0 if data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"] == 0 else data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
+                    target_user = data["player"]["displayname"]
 
                     win_loss_ratio = roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars))
                     final_kill_death_ratio = roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars))
 
                     player_stats = f"{target_user} | WLR: {win_loss_ratio} | FKDR: {final_kill_death_ratio} | W: {wins_bedwars} | FK: {final_kills_bedwars}"# | WS: {winstreak_bedwars}"
-                    self.send_minecraft_message(None, player_stats, "General")
+                    self.send_minecraft_message("None", player_stats, "General")
                 return
 
     def send_minecraft_message(self, discord, message, type):
         if type == "General":
             message_text = f"/gc {discord}: {message}"
-            if discord == None:
+            if discord == "None":
                 message_text = f"/gc {message}"
-                print("Discord is none")
             message_text = message_text[:256]
             self.bot.chat(message_text)
             
         if type == "Officer":
             message_text = f"/oc {discord}: {message}"
-            if discord == None:
+            if discord == "None":
                 message_text = f"/oc {message}"
             message_text = message_text[:256]
             self.bot.chat(message_text)
