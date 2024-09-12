@@ -185,10 +185,10 @@ class MinecraftBotManager:
                 else:
                     # winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
                     
-                    wins_bedwars = 0 if data["player"]["stats"]["Bedwars"]["wins_bedwars"] == 0 else data["player"]["stats"]["Bedwars"]["wins_bedwars"]
-                    losses_bedwars = 0 if data["player"]["stats"]["Bedwars"]["losses_bedwars"] == 0 else data["player"]["stats"]["Bedwars"]["losses_bedwars"]
-                    final_kills_bedwars = 0 if data["player"]["stats"]["Bedwars"]["final_kills_bedwars"] == 0 else data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
-                    final_deaths_bedwars = 0 if data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"] == 0 else data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
+                    wins_bedwars = data["player"]["stats"]["Bedwars"]["wins_bedwars"]
+                    losses_bedwars = data["player"]["stats"]["Bedwars"]["losses_bedwars"]
+                    final_kills_bedwars = data["player"]["stats"]["Bedwars"]["final_kills_bedwars"]
+                    final_deaths_bedwars = data["player"]["stats"]["Bedwars"]["final_deaths_bedwars"]
                     target_user = data["player"]["displayname"]
 
                     win_loss_ratio = roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars))
