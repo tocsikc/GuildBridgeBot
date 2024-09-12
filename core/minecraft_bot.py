@@ -194,11 +194,11 @@ class MinecraftBotManager:
                     # winstreak_bedwars = data["player"]["stats"]["Bedwars"]["winstreak"]
                     bedwars_stats = [wins_bedwars, losses_bedwars, final_kills_bedwars, final_deaths_bedwars, winstreak_bedwars]
                     for stat in bedwars_stats:
-                        print(str(stat) in data["player"]["stats"]["Bedwars"])
                         try:
                             stat = data["player"]["stats"]["Bedwars"][str(stat)]
                         except:
                             stat = 0
+                        print(stat)
 
                     target_user = data["player"]["displayname"]
 
