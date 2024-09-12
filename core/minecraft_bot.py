@@ -6,7 +6,11 @@ from core.config import ServerConfig, SettingsConfig, AccountConfig
 
 regex_username = re.compile(r"^(?:Guild|Officer) > (?:\[[+A-Z]*\] )*([a-zA-Z0-9_]+) (?:\[[A-Z]*\]: )?(.+)")
 
-wins_bedwars = 0, losses_bedwars = 0, final_kills_bedwars = 0, final_deaths_bedwars = 0, winstreak_bedwars = 0
+wins_bedwars = 0
+losses_bedwars = 0
+final_kills_bedwars = 0
+final_deaths_bedwars = 0
+winstreak_bedwars = 0
 
 mineflayer = require("mineflayer")
 
