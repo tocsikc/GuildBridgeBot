@@ -176,7 +176,7 @@ class MinecraftBotManager:
                     if command_args[i] == "!bedwars" or command_args == "!bw" or command_args == "":
                         pass
                     else:
-                        username = command_args[i]
+                        username = command_args[i].strip()
                         break
                 player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name={username}"
                 data = getInfo(player_data) 
@@ -203,7 +203,7 @@ class MinecraftBotManager:
                     final_kills_bedwars = getPlayerStat("Bedwars", "final_kills_bedwars", data)
                     final_deaths_bedwars = getPlayerStat("Bedwars", "final_deaths_bedwars", data)
                     winstreak_bedwars = getPlayerStat("Bedwars", "winstreak", data)
-                    target_user = data["player"]["displayname"]
+                    target_user = str(data["player"]["displayname"])
 
                     win_loss_ratio = roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars))
                     final_kill_death_ratio = roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars))
