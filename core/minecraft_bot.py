@@ -172,10 +172,13 @@ class MinecraftBotManager:
             command_args = parsed_message.split(' ')
             command_args[0] = command_args[0].lower()
             if command_args[0] == "!bedwars" or command_args[0] == "!bw":
-                if len(command_args) >= 2:
-                    player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name={command_args[1]}"
-                else:
-                    player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name={username}"
+                for i in range(len(command_args)):
+                    if command_args[i] == "!bedwars" or command_args == "!bw" or command_args == "":
+                        pass
+                    else:
+                        username = command_args[i]
+                        break
+                player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name={username}"
                 data = getInfo(player_data) 
                 print("Got data")
 
