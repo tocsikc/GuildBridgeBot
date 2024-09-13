@@ -203,7 +203,8 @@ class MinecraftBotManager:
                     final_kills_bedwars = getPlayerStat("Bedwars", "final_kills_bedwars", data)
                     final_deaths_bedwars = getPlayerStat("Bedwars", "final_deaths_bedwars", data)
                     winstreak_bedwars = getPlayerStat("Bedwars", "winstreak", data)
-                    target_user = str(data["player"]["displayname"])
+                    target_user = data["player"]["displayname"]
+                    print(target_user)
 
                     win_loss_ratio = roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars))
                     final_kill_death_ratio = roundToHundreths(final_kills_bedwars / ensureValidDenominator(final_deaths_bedwars))
