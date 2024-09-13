@@ -178,7 +178,13 @@ class MinecraftBotManager:
                     else:
                         username = command_args[i].strip()
                         break
-                player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name={username}"
+                    
+                get_uuid = f'https://api.mojang.com/users/profiles/minecraft/{username}?'
+                uuid_data = getInfo(get_uuid)
+                uuid = uuid_data["id"]
+                target_user = uuid_data["name"]
+
+                player_data = f"https://api.hypixel.net/player?key={SettingsConfig.api_key}&name={uuid}"
                 data = getInfo(player_data) 
                 print("Got data")
 
@@ -203,7 +209,6 @@ class MinecraftBotManager:
                     final_kills_bedwars = getPlayerStat("Bedwars", "final_kills_bedwars", data)
                     final_deaths_bedwars = getPlayerStat("Bedwars", "final_deaths_bedwars", data)
                     winstreak_bedwars = getPlayerStat("Bedwars", "winstreak", data)
-                    target_user = data["player"]["displayname"]
                     print(target_user)
 
                     win_loss_ratio = roundToHundreths(wins_bedwars / ensureValidDenominator(losses_bedwars))
